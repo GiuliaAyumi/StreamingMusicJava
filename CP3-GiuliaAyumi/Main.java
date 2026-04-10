@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class Main {
     
+	
    
     static Scanner scanner = new Scanner(System.in);
     static ArrayList<Musica> musica = new ArrayList<>();
