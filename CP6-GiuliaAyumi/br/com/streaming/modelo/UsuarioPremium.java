@@ -1,7 +1,8 @@
-
+package br.com.streaming.modelo;
 
 import java.util.ArrayList;
 
+// ALTERADO: Apenas ajuste de pacote
 public class UsuarioPremium extends Usuario {
     private String plano;
     private ArrayList<Musica> musicasBaixadas;
@@ -18,7 +19,6 @@ public class UsuarioPremium extends Usuario {
 
     @Override
     public void reproduzirMusica(Musica musica) {
-       
         System.out.println("🎵 Reproduzindo em ALTA QUALIDADE: " + musica.getTitulo() + " - " + musica.getArtista());
         historicoReproducao.add(musica);
     }
@@ -26,7 +26,7 @@ public class UsuarioPremium extends Usuario {
     public void baixarMusica(Musica musica) {
         if (!musicasBaixadas.contains(musica)) {
             musicasBaixadas.add(musica);
-            System.out.println("⬇️ Música baixada: " + musica.getTitulo() + " - " + musica.getArtista());
+            musica.baixar(); // ALTERADO: Utilizando o método da interface Baixavel
         } else {
             System.out.println("Música já está baixada!");
         }
@@ -38,25 +38,16 @@ public class UsuarioPremium extends Usuario {
             System.out.println("Nenhuma música baixada.");
             return;
         }
-        
         for (int i = 0; i < musicasBaixadas.size(); i++) {
             System.out.println((i + 1) + ". " + musicasBaixadas.get(i).exibir());
         }
     }
 
-    public String getPlano() {
-        return plano;
-    }
+    public String getPlano() { return plano; }
 
-    public void setPlano(String plano) {
-        this.plano = plano;
-    }
+    public void setPlano(String plano) { this.plano = plano; }
 
-    public ArrayList<Musica> getMusicasBaixadas() {
-        return musicasBaixadas;
-    }
+    public ArrayList<Musica> getMusicasBaixadas() { return musicasBaixadas; }
 
-    public void setMusicasBaixadas(ArrayList<Musica> musicasBaixadas) {
-        this.musicasBaixadas = musicasBaixadas;
-    }
+    public void setMusicasBaixadas(ArrayList<Musica> musicasBaixadas) { this.musicasBaixadas = musicasBaixadas; }
 }

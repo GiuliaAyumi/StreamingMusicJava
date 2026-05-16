@@ -1,42 +1,54 @@
+package br.com.streaming.modelo;
 
-
+import br.com.streaming.servico.Baixavel;
+import br.com.streaming.util.FormatadorTempo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Musica {
-    private String titulo;
+// ALTERADO: Herda de ItemReproducao e implementa Baixavel
+public class Musica extends ItemReproducao implements Baixavel {
     private String artista;
     private int duracaoSegundos;
     private String genero;
     private static ArrayList<String> generosPermitidos = new ArrayList<>();
     private static ArrayList<Musica> catalogo = new ArrayList<>();
 
-    public Musica() {
-        this("Sem Título", "Sem Artista", 0, "Pop");
-    }
-
     public Musica(String titulo, String artista, int duracaoSegundos, String genero) {
-        setTitulo(titulo);
+        super(titulo); // ALTERADO: Passa o título para a classe pai
         setArtista(artista);
         setDuracaoSegundos(duracaoSegundos);
         setGenero(genero);
     }
 
-    public String getTitulo() {
-        return titulo;
+    // NOVO: Método obrigatório da interface Reproduzivel
+    @Override
+    public void reproduzir() {
+        System.out.println("🎵 Reproduzindo: " + getTitulo() + " - " + this.artista);
     }
 
-    public void setTitulo(String titulo) {
-        if (titulo == null || titulo.trim().isEmpty()) {
-            throw new IllegalArgumentException("Título inválido");
-        }
-        this.titulo = titulo.trim();
+    // NOVO: Método obrigatório da interface Baixavel
+    @Override
+    public void baixar() {
+        System.out.println("⬇️ Baixando a música: " + getTitulo() + " para ouvir offline.");
     }
 
-    public String getArtista() {
-        return artista;
+    public String exibir() {
+        // ALTERADO: Uso do FormatadorTempo
+        return "Titulo: " + getTitulo() + " | Artista: " + this.artista + 
+               " | Duração: " + FormatadorTempo.formatar(this.duracaoSegundos) + 
+               " | Gênero: " + this.genero;
     }
 
+    public boolean contemTitulo(String busca) {
+        return getTitulo().toLowerCase().contains(busca.toLowerCase());
+    }
+
+    public boolean contemArtista(String busca) {
+        return this.artista.toLowerCase().contains(busca.toLowerCase());
+    }
+
+    public String getArtista() { return artista; }
+    
     public void setArtista(String artista) {
         if (artista == null || artista.trim().isEmpty()) {
             throw new IllegalArgumentException("Artista inválido");
@@ -44,10 +56,8 @@ public class Musica {
         this.artista = artista.trim();
     }
 
-    public int getDuracaoSegundos() {
-        return duracaoSegundos;
-    }
-
+    public int getDuracaoSegundos() { return duracaoSegundos; }
+    
     public void setDuracaoSegundos(int duracaoSegundos) {
         if (duracaoSegundos >= 0 && duracaoSegundos <= 3600) {
             this.duracaoSegundos = duracaoSegundos;
@@ -56,10 +66,8 @@ public class Musica {
         }
     }
 
-    public String getGenero() {
-        return genero;
-    }
-
+    public String getGenero() { return genero; }
+    
     public void setGenero(String genero) {
         if (genero == null) throw new IllegalArgumentException("Gênero não pode ser nulo");
         boolean valido = false;
@@ -75,40 +83,9 @@ public class Musica {
         }
     }
 
-    public static ArrayList<String> getGenerosPermitidos() {
-        return generosPermitidos;
-    }
+    public static ArrayList<String> getGenerosPermitidos() { return generosPermitidos; }
     
-    public static ArrayList<Musica> getCatalogo() {
-        return catalogo;
-    }
-
-    public String exibir() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Titulo: ");
-        sb.append(this.titulo);
-        sb.append(" | Artista: ");
-        sb.append(this.artista);
-        sb.append(" | Duração: ");
-        sb.append(this.getDuracaoFormatada());
-        sb.append(" | Gênero: ");
-        sb.append(this.genero);
-        return sb.toString();
-    }
-
-    public String getDuracaoFormatada() {
-        int min = this.duracaoSegundos / 60;
-        int seg = this.duracaoSegundos % 60;
-        return String.format("%02d:%02d", min, seg);
-    }
-
-    public boolean contemTitulo(String busca) {
-        return this.titulo.toLowerCase().contains(busca.toLowerCase());
-    }
-
-    public boolean contemArtista(String busca) {
-        return this.artista.toLowerCase().contains(busca.toLowerCase());
-    }
+    public static ArrayList<Musica> getCatalogo() { return catalogo; }
 
     public static void adicionarGeneros() {
         generosPermitidos.clear();
@@ -125,7 +102,7 @@ public class Musica {
         generosPermitidos.add("MPB");
     }
     
-    public static void catalogoMusica() {
+     public static void catalogoMusica() {
     	catalogo.clear();
     	catalogo.addAll(List.of(
                 new Musica("Artista genérico", "Veigh", 145, "Trap"),

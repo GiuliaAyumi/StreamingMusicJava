@@ -1,14 +1,18 @@
+package br.com.streaming.principal;
 
-
+import br.com.streaming.modelo.*;
+import br.com.streaming.servico.GeradorRecomendacoes;
+import br.com.streaming.util.Validador;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+// ALTERADO: Classe principal ajustada para importar e usar os novos pacotes/classes
 public class StreamingMusica {
 
     static Scanner scanner = new Scanner(System.in);
-    
     static ArrayList<Usuario> usuarios = new ArrayList<>();
     static Usuario usuarioLogado = null;
+    static GeradorRecomendacoes gerador = new GeradorRecomendacoes(); 
 
     public static void main(String[] args) {
         Musica.adicionarGeneros();
@@ -17,7 +21,7 @@ public class StreamingMusica {
         int opcaoEntrada;
         do {
             menuEntrada();
-            opcaoEntrada = lerOpcao();
+            opcaoEntrada = Validador.lerOpcao(scanner);
             processarOpcaoEntrada(opcaoEntrada);
         } while (opcaoEntrada != 0);
     }
@@ -45,21 +49,21 @@ public class StreamingMusica {
 
     public static void criarUsuario() {
         System.out.println("\n--- CRIAR NOVO USUÁRIO ---");
-        String nome = validarTexto("Nome: ");
-        String email = validarTexto("Email: ");
+        String nome = Validador.validarTexto("Nome: ", scanner);
+        String email = Validador.validarTexto("Email: ", scanner);
 
         System.out.println("\nTipo de conta:");
         System.out.println("1. Free");
         System.out.println("2. Premium");
         System.out.print("Escolha: ");
-        int tipo = lerOpcao();
+        int tipo = Validador.lerOpcao(scanner);
 
         if (tipo == 1) {
             usuarios.add(new UsuarioFree(nome, email));
             System.out.println("Usuário criado com sucesso!");
         } else if (tipo == 2) {
             System.out.println("Plano (1. Mensal / 2. Anual / 3. Familiar): ");
-            int opcaoPlano = lerOpcao();
+            int opcaoPlano = Validador.lerOpcao(scanner);
             String plano = (opcaoPlano == 1) ? "Mensal" : (opcaoPlano == 2) ? "Anual" : "Familiar";
             usuarios.add(new UsuarioPremium(nome, email, plano));
             System.out.println("Usuário criado com sucesso!");
@@ -76,14 +80,12 @@ public class StreamingMusica {
 
         listarUsuarios();
         System.out.print("\nEscolha o número do usuário: ");
-        int id = lerOpcao() - 1;
+        int id = Validador.lerOpcao(scanner) - 1;
 
         if (id >= 0 && id < usuarios.size()) {
             usuarioLogado = usuarios.get(id);
             String tipoConta = (usuarioLogado instanceof UsuarioPremium) ? "Premium" : "Free";
             System.out.println("Login realizado: " + usuarioLogado.getName() + " (" + tipoConta + ")");
-            
-            
             loopUsuarioLogado(); 
         } else {
             System.out.println("Usuário não encontrado.");
@@ -111,7 +113,7 @@ public class StreamingMusica {
             } else {
                 menuFree();
             }
-            opcao = lerOpcao();
+            opcao = Validador.lerOpcao(scanner);
             processarOpcao(opcao);
         } while (opcao != 0);
         
@@ -186,26 +188,20 @@ public class StreamingMusica {
         System.out.println("1. Top Mais Tocadas");
         System.out.println("2. Recomendadas para Você");
         System.out.print("Escolha: ");
-        int esc = lerOpcao();
+        int esc = Validador.lerOpcao(scanner);
 
-        String criterio = "";
-        String nome = "";
+        Playlist gerada = null;
         if (esc == 1) { 
-            criterio = "top"; 
-            nome = "Top Mais Tocadas"; 
+            gerada = gerador.gerarTopMaisTocadas(Musica.getCatalogo());
         } else if (esc == 2) { 
-            criterio = "recomendadas"; 
-            nome = "Recomendadas para Você"; 
+            gerada = gerador.gerarRecomendadas(Musica.getCatalogo());
         } else { 
             System.out.println("Opção inválida."); 
             return; 
         }
 
-        System.out.println("Gerando playlist \"" + nome + "\"...");
-        PlaylistAutomatica pa = new PlaylistAutomatica(nome, criterio);
-        pa.atualizar(Musica.getCatalogo());
-        usuarioLogado.getPlaylists().add(pa);
-        System.out.println("Playlist criada com " + pa.getQuantidadeMusicas() + " músicas!");
+        usuarioLogado.getPlaylists().add(gerada);
+        System.out.println("Playlist '" + gerada.getTitulo() + "' criada com " + gerada.getQuantidadeMusicas() + " músicas!");
     }
 
     public static void exibirEstatisticasGlobais() {
@@ -253,7 +249,7 @@ public class StreamingMusica {
     }
 
     public static void buscarMusica() {
-        String termo = validarTexto("Digite o título ou artista para buscar: ");
+        String termo = Validador.validarTexto("Digite o título ou artista para buscar: ", scanner);
         boolean encontrou = false;
         for (Musica m : Musica.getCatalogo()) {
             if (m.contemTitulo(termo) || m.contemArtista(termo)) {
@@ -269,14 +265,14 @@ public class StreamingMusica {
             System.out.println("Limite de " + UsuarioFree.getMaxPlaylists() + " playlists atingido!");
             return; 
         }
-        String nomePlaylist = validarTexto("Digite o nome da nova playlist: ");
+        String nomePlaylist = Validador.validarTexto("Digite o nome da nova playlist: ", scanner);
         usuarioLogado.criarPlaylist(nomePlaylist);
     }
 
     public static void reproduzirMusica() {
         listarBiblioteca();
         System.out.print("Escolha o número da música: ");
-        int indice = lerOpcao() - 1;
+        int indice = Validador.lerOpcao(scanner) - 1;
         if (indice >= 0 && indice < Musica.getCatalogo().size()) {
             usuarioLogado.reproduzirMusica(Musica.getCatalogo().get(indice));
         } else {
@@ -286,7 +282,7 @@ public class StreamingMusica {
 
     public static void fazerUpgrade() {
         System.out.println("Plano (1. Mensal / 2. Anual / 3. Familiar): ");
-        int opcaoPlano = lerOpcao();
+        int opcaoPlano = Validador.lerOpcao(scanner);
         String planoEscolhido = (opcaoPlano == 1) ? "Mensal" : (opcaoPlano == 2) ? "Anual" : "Familiar";
 
         UsuarioPremium novoPremium = new UsuarioPremium(usuarioLogado.getName(), usuarioLogado.getEmail(), planoEscolhido);
@@ -301,7 +297,7 @@ public class StreamingMusica {
     public static void baixarMusica() {
         listarBiblioteca();
         System.out.print("Escolha a música para baixar: ");
-        int indice = lerOpcao() - 1;
+        int indice = Validador.lerOpcao(scanner) - 1;
         if (indice >= 0 && indice < Musica.getCatalogo().size()) {
             ((UsuarioPremium) usuarioLogado).baixarMusica(Musica.getCatalogo().get(indice));
         }
@@ -322,7 +318,7 @@ public class StreamingMusica {
             System.out.println("5. Reproduzir uma playlist inteira");
             System.out.println("0. Voltar");
             System.out.print("Escolha uma opção: ");
-            opcaoSub = lerOpcao();
+            opcaoSub = Validador.lerOpcao(scanner);
             
             switch (opcaoSub) {
                 case 1: usuarioLogado.listarPlaylists(); break;
@@ -337,40 +333,40 @@ public class StreamingMusica {
     public static void adicionarMusicaNaPlaylist() {
         usuarioLogado.listarPlaylists();
         System.out.print("Digite o número da playlist: ");
-        Playlist p = usuarioLogado.encontrarPlaylist(lerOpcao() - 1);
+        Playlist p = usuarioLogado.encontrarPlaylist(Validador.lerOpcao(scanner) - 1);
         if (p == null) return;
 
-        if (!(p instanceof PlaylistAutomatica)) {
+        if (p.getTitulo().equals("Top Mais Tocadas") || p.getTitulo().equals("Recomendadas para Você")) {
+            System.out.println("Você não pode modificar playlists geradas pelo sistema.");
+        } else {
             listarBiblioteca();
             System.out.print("Digite o número da música: ");
-            int id = lerOpcao() - 1;
+            int id = Validador.lerOpcao(scanner) - 1;
             if (id >= 0 && id < Musica.getCatalogo().size()) {
                 p.adicionarMusica(Musica.getCatalogo().get(id));
             }
-        } else {
-            System.out.println("Você não pode modificar playlists geradas pelo sistema.");
         }
     }
 
     public static void removerMusicaDaPlaylist() {
         usuarioLogado.listarPlaylists();
         System.out.print("Digite o número da playlist: ");
-        Playlist p = usuarioLogado.encontrarPlaylist(lerOpcao() - 1);
+        Playlist p = usuarioLogado.encontrarPlaylist(Validador.lerOpcao(scanner) - 1);
         if (p == null) return;
 
-        if (!(p instanceof PlaylistAutomatica)) {
+        if (p.getTitulo().equals("Top Mais Tocadas") || p.getTitulo().equals("Recomendadas para Você")) {
+            System.out.println("Você não pode modificar playlists geradas pelo sistema.");
+        } else {
             p.listarMusicas();
             System.out.print("Música para remover: ");
-            p.removerMusica(lerOpcao() - 1);
-        } else {
-            System.out.println("Você não pode modificar playlists geradas pelo sistema.");
+            p.removerMusica(Validador.lerOpcao(scanner) - 1);
         }
     }
 
     public static void exibirDetalhesPlaylist() {
         usuarioLogado.listarPlaylists();
         System.out.print("Digite o número da playlist: ");
-        Playlist p = usuarioLogado.encontrarPlaylist(lerOpcao() - 1);
+        Playlist p = usuarioLogado.encontrarPlaylist(Validador.lerOpcao(scanner) - 1);
         if (p != null) {
             p.listarMusicas();
             System.out.println("Quantidade: " + p.getQuantidadeMusicas() + " | Duração total: " + p.getDuracaoTotal() + " seg.");
@@ -380,21 +376,7 @@ public class StreamingMusica {
     public static void reproduzirPlaylist() {
         usuarioLogado.listarPlaylists();
         System.out.print("Digite o número da playlist: ");
-        Playlist p = usuarioLogado.encontrarPlaylist(lerOpcao() - 1);
+        Playlist p = usuarioLogado.encontrarPlaylist(Validador.lerOpcao(scanner) - 1);
         if (p != null) p.reproduzir();
-    }
-
-    public static int lerOpcao() {
-        try { return Integer.parseInt(scanner.nextLine()); } 
-        catch (NumberFormatException e) { return -1; }
-    }
-
-    public static String validarTexto(String mensagem) {
-        String texto = "";
-        while (texto.trim().isEmpty()) {
-            System.out.print(mensagem);
-            texto = scanner.nextLine();
-        }
-        return texto;
     }
 }

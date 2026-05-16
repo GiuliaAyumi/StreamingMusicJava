@@ -1,33 +1,19 @@
-package Application;
+package br.com.streaming.modelo;
 
 import java.util.ArrayList;
 
-public class Playlist {
-    private String name;
-    private ArrayList<Musica> musicas = new ArrayList<>();
+// ALTERADO: Herda de ItemReproducao e usa "titulo" em vez de "nome"
+public class Playlist extends ItemReproducao {
+    protected ArrayList<Musica> musicas;
+    protected String descricao;
 
-    public Playlist() {
-        this("Sem nome");
+    public Playlist(String nome) {
+        super(nome);
+        this.musicas = new ArrayList<>();
+        this.descricao = "Criada pelo usuário";
     }
 
-    public Playlist(String name) {
-        setName(name);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("O nome da playlist não pode ser nulo ou vazio.");
-        }
-        this.name = name.trim();
-    }
-
-    public ArrayList<Musica> getMusicas() {
-        return musicas;
-    }
+    public ArrayList<Musica> getMusicas() { return musicas; }
 
     public void adicionarMusica(Musica musica) {
         if (musica == null) {
@@ -47,8 +33,20 @@ public class Playlist {
         }
     }
 
+    @Override
+    public void reproduzir() {
+        System.out.println("🎵 Reproduzindo playlist: " + getTitulo());
+        if (musicas.isEmpty()) {
+            System.out.println("A playlist está vazia!");
+            return;
+        }
+        for (Musica m : musicas) {
+            System.out.println(" ▶ " + m.getTitulo() + " - " + m.getArtista());
+        }
+    }
+
     public void listarMusicas() {
-        System.out.println("\n--- Playlist: " + this.getName() + " ---");
+        System.out.println("\n--- Playlist: " + getTitulo() + " ---");
         if (this.musicas.isEmpty()) {
             System.out.println("A playlist está vazia.");
             return;
@@ -60,8 +58,8 @@ public class Playlist {
 
     public int getDuracaoTotal() {
         int total = 0;
-        for (int i = 0; i < this.musicas.size(); i++) {
-            total += this.musicas.get(i).getDuracaoSegundos();
+        for (Musica m : this.musicas) {
+            total += m.getDuracaoSegundos();
         }
         return total;
     }
