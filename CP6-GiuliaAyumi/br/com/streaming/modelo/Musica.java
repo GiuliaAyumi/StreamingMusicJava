@@ -102,29 +102,29 @@ public class Musica extends ItemReproducao implements Baixavel {
         generosPermitidos.add("MPB");
     }
     
-    public static void catalogoMusica() {
+     public static void catalogoMusica() {
     	catalogo.clear();
     	catalogo.addAll(List.of(
                 new Musica("Artista genérico", "Veigh", 145, "Trap"),
                 new Musica("Talvez você precise de mim", "Veigh", 152, "Trap"),
-                new Musica("Pela última vez", "Menos é Mais", 186, "Pagode"),
-                new Musica("P do pecado", "Menos é Mais", 175, "Pagode"),
-                new Musica("Aquele lugar", "Menos é Mais", 225, "Pagode"),
-                new Musica("Estilo Cachorro", "Racionais MC's", 378, "Hip-Hop"),
-                new Musica("Jesus chorou", "Racionais MC's", 474, "Hip-Hop"),
-                new Musica("Diário de um detento", "Racionais MC's", 451, "Hip-Hop"),
-                new Musica("Six Days", "DJ Shadow", 229, "Eletrônica"),
-                new Musica("DtMF", "Bad Bunny", 205, "Trap"),
-                new Musica("See you again(feat. Kali Uchis)", "Tyler The Creator", 180, "Hip-Hop"),
-                new Musica("21 questions", "50 Cent", 224, "Hip-Hop"),
-                new Musica("Não quero só dinheiro", "Tim Maia", 153, "MPB"),
-                new Musica("País do futebol", "MC Guimê", 147, "Funk"),
-                new Musica("Céu azul", "Charlie Brown Jr.", 198, "Rock"),
-                new Musica("Vagalumes", "Pollo", 174, "Pop"),
-                new Musica("Boate azul", "Joaquim & Manuel", 198, "Sertanejo"),
-                new Musica("Sonhar", "MC Gui", 182, "Funk"),
-                new Musica("Calculista", "MC Joãozinho VT", 168, "Funk"),
+                new Musica("Big momma freestyle", "Slipmami", 120, "Trap"),
+                new Musica("Shut up and listen", "Nicholas Bonnin, Angelicca", 240, "Pop"),
+                new Musica("Te querer tanto", "Lou Garcia", 155, "Pop"),
+                new Musica("Fuso", "Duquesa, Go Dassisti", 115, "Trap"),
+                new Musica("Superman", "Eminem, Dina Rae", 350, "Hip-Hop"),
+                new Musica("Look at me", "XXXTentacion", 125, "Hip-Hop"),
+                new Musica("Resenha do Arrocha", "J.Eskine, Alef Donk", 355, "Funk"),
+                new Musica("Dancin", "Aaron Smith, Krono, Luvli", 180, "Eletrônica"),
+                new Musica("Pilantragem", "MC Livinho", 200, "Funk"),
+                new Musica("Sweet Child O'Mine", "Guns N'Roses", 355, "Rock"),
+                new Musica("Bring me to life", "Evanescence", 180, "Rock"),
+                new Musica("Doce veneno", "MC Paiva ZS", 180, "Funk"),
+                new Musica("Eles são fracos", "Slipmami", 150, "Trap"),
+                new Musica("We belong together", "Ritchie Valens", 110, "Pop"),
+                new Musica("Medo bobo", "Maiara & Maraisa", 198, "Sertanejo"),
+                new Musica("Candy", "Doja Cat", 200, "Pop"),
+                new Musica("SAD", "XXXTentacion", 125, "Hip-Hop"),
                 new Musica("365 dias", "MC Marks", 210, "Funk")
-        ));	
+            ));	
     }
 }
