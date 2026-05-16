@@ -1,5 +1,6 @@
+package br.com.streaming.modelo;
 
-
+// ALTERADO: Apenas ajuste de pacote
 public class UsuarioFree extends Usuario {
     private static final int MAX_PLAYLISTS = 3;
     private int contadorReproducoes;
@@ -40,15 +41,9 @@ public class UsuarioFree extends Usuario {
         System.out.println("=".repeat(50) + "\n");
     }
 
-    public int getContadorReproducoes() {
-        return contadorReproducoes;
-    }
+    public int getContadorReproducoes() { return contadorReproducoes; }
 
-    public void setContadorReproducoes(int contadorReproducoes) {
-        this.contadorReproducoes = contadorReproducoes;
-    }
+    public void setContadorReproducoes(int contadorReproducoes) { this.contadorReproducoes = contadorReproducoes; }
 
-    public static int getMaxPlaylists() {
-        return MAX_PLAYLISTS;
-    }
+    public static int getMaxPlaylists() { return MAX_PLAYLISTS; }
 }

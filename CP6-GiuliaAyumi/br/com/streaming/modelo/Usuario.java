@@ -1,7 +1,8 @@
-
+package br.com.streaming.modelo;
 
 import java.util.ArrayList;
 
+// ALTERADO: Apenas ajuste de pacote
 public class Usuario {
     protected String name;
     protected String email;
@@ -34,21 +35,13 @@ public class Usuario {
         this.email = email;
     }
 
-    public final ArrayList<Playlist> getPlaylists() { 
-    	return playlists; 
-    }
+    public final ArrayList<Playlist> getPlaylists() { return playlists; }
     
-    public final void setPlaylists(ArrayList<Playlist> playlists) { 
-    	this.playlists = playlists; 
-    }
+    public final void setPlaylists(ArrayList<Playlist> playlists) { this.playlists = playlists; }
     
-    public final ArrayList<Musica> getHistoricoReproducao() { 
-    	return historicoReproducao; 
-    }
+    public final ArrayList<Musica> getHistoricoReproducao() { return historicoReproducao; }
     
-    public final void setHistoricoReproducao(ArrayList<Musica> historicoReproducao) { 
-    	this.historicoReproducao = historicoReproducao; 
-    }
+    public final void setHistoricoReproducao(ArrayList<Musica> historicoReproducao) { this.historicoReproducao = historicoReproducao; }
 
     public void criarPlaylist(String nome) {
         Playlist playlist = new Playlist(nome);
@@ -60,6 +53,7 @@ public class Usuario {
         System.out.println("🎵 Reproduzindo: " + musica.getTitulo() + " - " + musica.getArtista());
         historicoReproducao.add(musica);
     }
+
     public final void exibirHistorico() {
         System.out.println("\n--- HISTÓRICO DE REPRODUÇÃO ---");
         if (historicoReproducao.isEmpty()) {
@@ -77,7 +71,7 @@ public class Usuario {
             return;
         }
         for (int i = 0; i < this.playlists.size(); i++) {
-            System.out.println((i + 1) + ". " + this.playlists.get(i).getNome());
+            System.out.println((i + 1) + ". " + this.playlists.get(i).getTitulo());
         }
     }
 
